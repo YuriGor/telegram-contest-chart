@@ -1,0 +1,47 @@
+{
+  "name": "telegram-contest-chart",
+  "version": "1.0.0",
+  "description": "Telegram Chart Contest",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server",
+    "produce": "NODE_ENV=production npm run-script build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YuriGor/telegram-contest-chart.git"
+  },
+  "author": "Yuri Gor",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/YuriGor/telegram-contest-chart/issues"
+  },
+  "homepage": "https://github.com/YuriGor/telegram-contest-chart#readme",
+  "devDependencies": {
+    "babel-eslint": "*",
+    "babel-plugin-preval": "*",
+    "body-parser": "^1.18.3",
+    "css-loader": "^2.1.1",
+    "eslint": "*",
+    "eslint-config-prettier": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-prettier": "*",
+    "file-loader": "^3.0.1",
+    "mini-css-extract-plugin": "^0.5.0",
+    "node-sass": "^4.11.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "prettier": "*",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "dependencies": {
+    "@mdi/js": "^3.5.95",
+    "lodash": "^4.17.11"
+  }
+}
