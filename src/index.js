@@ -1,18 +1,31 @@
 import _ from 'lodash';
 import './style.scss';
-import { mdiCheck } from '@mdi/js';
+import Chart from './components/chart/chart';
 
-function component() {
-  var element = document.createElement('div');
-
-  // Lodash, currently included via a script, is required for this line to work
-  element.innerHTML =
-    _.join(['Hello', 'webpack!'], ' ') +
-    '<svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#000000" d="' +
-    mdiCheck +
-    '"/></svg>';
-  element.classList.add('hello');
-  return element;
-}
-
-document.body.appendChild(component());
+// function component() {
+//   let element = document.createElement('div');
+//
+//   // Lodash, currently included via a script, is required for this line to work
+//   element.innerHTML =
+//     _.join(['Hello', 'webpack!'], ' ') +
+//     '<svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#000000" d="' +
+//     mdiCheck +
+//     '"/></svg>';
+//   element.classList.add('hello');
+//   return element;
+// }
+fetch('/data/canonical.json')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(dataArray) {
+    // console.log(JSON.stringify(myJson));
+    let charts = _.map(dataArray, (data) => {
+      let chart = Chart(document.getElementById('charts'), data);
+      chart.render();
+      window.addEventListener('resize', function(event) {
+        chart.render();
+      });
+      return chart;
+    });
+  });

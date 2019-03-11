@@ -1,0 +1,18 @@
+.axis-x {
+  position:absolute;
+  bottom:0;
+  white-space: nowrap;
+  width: calc(100% - 100px);
+  height: 26px;
+  span {
+    transition-duration: 0.5s;
+    transition-property: opacity;
+    position:absolute;
+    opacity: 0;
+    color: #96a2aa;
+    font-size: 23px;
+    &.show{
+      opacity: 1;
+    }
+  }
+}

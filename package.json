@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/YuriGor/telegram-contest-chart#readme",
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
     "babel-eslint": "*",
+    "babel-loader": "^8.0.5",
     "babel-plugin-preval": "*",
     "body-parser": "^1.18.3",
     "css-loader": "^2.1.1",
@@ -42,6 +45,7 @@
   },
   "dependencies": {
     "@mdi/js": "^3.5.95",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0"
   }
 }
