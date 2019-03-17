@@ -1,6 +1,7 @@
+@import "cfg";
 .axis-x {
   position:absolute;
-  bottom:0;
+  bottom:$minimap-height;
   white-space: nowrap;
   width: calc(100% - 60px);
   height: 26px;

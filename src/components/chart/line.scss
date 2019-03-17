@@ -1,3 +1,5 @@
+@import "cfg";
+
 svg.line {
   position: absolute;
   top: 0;
@@ -5,5 +7,5 @@ svg.line {
   // bottom: 26px;
   left: 0;
   width: 100%;
-  height: calc(100% - 26px);
+  height: calc(100% - 26px - #{$minimap-height});
 }

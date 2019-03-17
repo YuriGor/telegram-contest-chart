@@ -3,7 +3,7 @@ import moment from 'moment';
 import './axisX.scss';
 import dynamicCssRule from '../../lib/dynamicCssRule';
 
-function AxisX(parent, data, options) {
+function AxisX(parent, data, state) {
   let element = document.createElement('div');
   element.classList.add('axis-x');
   let labelsX = [];

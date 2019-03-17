@@ -14,7 +14,16 @@ import Chart from './components/chart/chart';
 //   element.classList.add('hello');
 //   return element;
 // }
-fetch('/data/canonical.json')
+
+window.addEventListener(
+  'contextmenu',
+  function(e) {
+    e.preventDefault();
+  },
+  false,
+);
+
+fetch('data/canonical.json')
   .then(function(response) {
     return response.json();
   })
