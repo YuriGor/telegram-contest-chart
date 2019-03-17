@@ -1,7 +1,7 @@
 @import "cfg";
 
 $frameColor: #ddeaf3;
-$gripWidth: 16px;
+$handleWidth: 16px;
 
 .chart-minimap {
   bottom: 0;
@@ -20,12 +20,13 @@ $gripWidth: 16px;
     z-index: 3;
   }
   .cover,.handle,.frame {
+    transition-duration: $panTransition;
+    transition-property: left, right;
     height: 100%;
     position: absolute;
   }
   .cover {
-    background: rgba(lighten($frameColor,20%),0.8);
-    pointer-events: none;
+    background: rgba(lighten($frameColor,5%),0.65);
     z-index: 3;
     &.left {
       left:0px;
@@ -36,21 +37,13 @@ $gripWidth: 16px;
   }
   .handle {
     box-sizing: border-box;
-    background:transparent;
+    background: $frameColor;
     z-index: 2;
-    width: $gripWidth + 30px;
-    padding: 0 15px;
-    .grip {
-      display: inline-block;
-      width: $gripWidth;
-      height: 100%;
-      margin: 0;
-      background: $frameColor;
-    }
-    &.left .grip {
+    width: $handleWidth;
+    &.left {
       cursor: w-resize;
     }
-    &.right .grip {
+    &.right {
       cursor: e-resize;
     }
   }

@@ -8,8 +8,7 @@ function AxisX(parent, data, state) {
   let labelsX = [];
   let xName = _.findKey(data.types, (t) => t == 'x');
   let xData = _.drop(_.find(data.columns, (c) => c[0] == xName));
-  let minOffset = 150;
-  let maxWidth = xData.length * minOffset;
+  let minOffset = 300;
   let showEach = 1;
   let percentOffset = 100 / xData.length;
   _.each(xData, (d, i) => {

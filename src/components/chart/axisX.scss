@@ -1,17 +1,19 @@
 @import "cfg";
 .axis-x {
+  transition-duration: $panTransition;
+  transition-property: left, width;
   position:absolute;
   bottom:$minimap-height;
   white-space: nowrap;
-  width: calc(100% - 60px);
-  height: 26px;
+  width: calc(100% - 100px);
+  height: $axisHeight + 2px;
   span {
-    transition-duration: 0.5s;
+    transition-duration: 0.7s;
     transition-property: opacity, transform;
     position:absolute;
     opacity: 0;
     transform: scale(0.5);
     color: #96a2aa;
-    font-size: 23px;
+    font-size: $axisHeight;
   }
 }

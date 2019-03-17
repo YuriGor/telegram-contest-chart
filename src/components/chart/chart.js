@@ -8,18 +8,27 @@ function Chart(parent, data, options) {
     {
       frameStart: 0.5,
       frameEnd: 1,
-      lineWidth: 5,
     },
     options || {},
   );
   const state = State(options);
 
   state.before('frameStart', (ev) => {
-    return ev.currentValue > 0 ? (ev.currentValue < 0.9 ? ev.currentValue : 0.9) : 0;
+    let v = ev.currentValue;
+    if (v > state.frameEnd - 0.05) {
+      v = state.frameEnd - 0.05;
+    }
+    v = v > 0 ? (v < 0.95 ? v : 0.95) : 0;
+    return v;
   });
 
   state.before('frameEnd', (ev) => {
-    return ev.currentValue < 1 ? (ev.currentValue > 0.1 ? ev.currentValue : 0.1) : 1;
+    let v = ev.currentValue;
+    if (v < state.frameStart + 0.05) {
+      v = state.frameStart + 0.05;
+    }
+    v = v < 1 ? (v > 0.05 ? v : 0.05) : 1;
+    return v;
   });
 
   let element = document.createElement('div');

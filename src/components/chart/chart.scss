@@ -1,5 +1,6 @@
 .chart {
   position: relative;
-  min-height: 100vw;
+  height: 100vw;
+  max-height: 100vh;
   user-select: none;
 }

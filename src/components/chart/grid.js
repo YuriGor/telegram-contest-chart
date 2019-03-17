@@ -28,10 +28,22 @@ function Grid(parent, data, state) {
     })
     .value();
   // console.log(state);
-  state.patch({ maxLineValue: _.reduce(lData, (max, ld) => Math.max(max, _.max(ld.data)), 0) });
+  state.patch({
+    maxLineValue: _.reduce(
+      lData,
+      (max, ld) => (max !== null ? Math.max(max, _.max(ld.data)) : _.max(ld.data)),
+      null,
+    ),
+    minLineValue: _.reduce(
+      lData,
+      (min, ld) => (min !== null ? Math.min(min, _.min(ld.data)) : _.min(ld.data)),
+      null,
+    ),
+  });
+  console.log(state);
   const lines = {};
   _.each(lData, (ld) => {
-    lines[ld.id] = Line(element, ld, state);
+    lines[ld.id] = Line(element, ld, state, { lineWidth: 5 });
   });
 
   const minimap = Minimap(element, lData, state);

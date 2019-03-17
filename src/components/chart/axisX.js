@@ -7,7 +7,7 @@ function AxisX(parent, data, state) {
   let element = document.createElement('div');
   element.classList.add('axis-x');
   let labelsX = [];
-  let minOffset = 90;
+  let minOffset = 180;
   let showEach = 1;
   let percentOffset = 100 / data.length;
   _.each(data, (d, i) => {
@@ -18,8 +18,16 @@ function AxisX(parent, data, state) {
     element.appendChild(lx);
   });
   parent.appendChild(element);
+
   function render() {
-    let newShowEach = Math.round((data.length * minOffset) / element.offsetWidth);
+    let clipW = state.frameEnd - state.frameStart;
+    let w = 1 / clipW;
+    let l = -state.frameStart * w;
+    element.style = `width:calc(${w * 100}% - 100px);left:${l * 100}%`;
+    renderLabels(w);
+  }
+  function renderLabels(w) {
+    let newShowEach = Math.round((data.length * minOffset) / (parent.offsetWidth * w));
     if (newShowEach != 1 && newShowEach % 2 != 0) {
       newShowEach++;
     }
@@ -35,6 +43,10 @@ function AxisX(parent, data, state) {
       element.className = `axis-x ${className}`;
     }
   }
+  renderLabels = _.throttle(renderLabels, 150);
+  state.on(['frameStart', 'frameEnd'], (e) => {
+    render(state);
+  });
   return { render, element };
 }
 export default AxisX;
