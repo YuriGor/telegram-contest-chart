@@ -1,13 +1,14 @@
 @import "cfg";
 
 svg.line {
-  transition-duration: $panTransition;
-  transition-property: left, width;
+  // transition-duration: $panTransition;
+  // transition-property: left, width,transform;
+  // transition-property: width;
   position: absolute;
   top: 0;
   // right: 0;
   // bottom: 26px;
   left: 0;
   width: 100%;
-  height: calc(100% - #{$axisHeight} - #{$minimap-height});
+  height: 100%;
 }

@@ -4,8 +4,9 @@
   "description": "Telegram Chart Contest",
   "private": true,
   "scripts": {
-    "build": "webpack",
-    "start": "webpack-dev-server",
+    "scsscfg": "node ./scsscfg",
+    "build": "npm run scsscfg && webpack",
+    "start": "npm run scsscfg && webpack-dev-server",
     "produce": "NODE_ENV=production npm run-script build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -6,7 +6,12 @@ html,body {
   position:absolute;
   overflow-x: hidden;
 }
+// body {
+//   padding: 15px;
+// }
 
 #charts {
   width:100%;
+  padding:0 20px;
+  box-sizing: border-box;
 }

@@ -43,7 +43,8 @@ function Line(parent, data, state, options) {
       let clipW = state.frameEnd - state.frameStart;
       let w = 1 / clipW;
       let l = -state.frameStart * w;
-      element.style = `width:${w * 100}%;left:${l * 100}%`;
+      // element.style = `width:${w * 100}%;left:${l * 100}%;`;
+      element.style = `width:${w * 100}%;transform:translate3d(${l * clipW * 100}%,0,0);`;
     }
   }
   function render(state) {

@@ -1,6 +1,19 @@
+@import "cfg";
+
 .chart {
   position: relative;
-  height: 100vw;
-  max-height: 100vh;
+  // height: 95vw;
+  height: 100vh;
   user-select: none;
+  * {
+    box-sizing: border-box;
+  }
+  h1 {
+    font-size: 50px;
+    font-family: sans-serif;
+    padding-top: 58px;
+    padding-bottom: 62px;
+    margin: 0;
+    height: $headerHeight;
+  }
 }

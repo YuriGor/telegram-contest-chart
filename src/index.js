@@ -29,8 +29,10 @@ fetch('data/canonical.json')
   })
   .then(function(dataArray) {
     // console.log(JSON.stringify(myJson));
-    let charts = _.map(dataArray, (data) => {
-      let chart = Chart(document.getElementById('charts'), data);
+    let charts = _.map(dataArray, (data, i) => {
+      let chart = Chart(document.getElementById('charts'), data, {
+        title: `Awesome Chart ${i + 1} / ${dataArray.length}`,
+      });
       chart.render();
       window.addEventListener('resize', function(event) {
         chart.render();

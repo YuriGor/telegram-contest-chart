@@ -23,11 +23,16 @@ function AxisX(parent, data, state) {
     let clipW = state.frameEnd - state.frameStart;
     let w = 1 / clipW;
     let l = -state.frameStart * w;
-    element.style = `width:calc(${w * 100}% - 100px);left:${l * 100}%`;
+    // element.style = `width:calc(${w * 100}% - 100px);left:${l * 100}%`;
+    element.style = `width:calc(${w * 100}% - ${minOffset}px);transform:translate3d(${l *
+      clipW *
+      100}%,0,0);`;
     renderLabels(w);
   }
   function renderLabels(w) {
-    let newShowEach = Math.round((data.length * minOffset) / (parent.offsetWidth * w));
+    let newShowEach = Math.round(
+      (data.length * minOffset) / ((parent.offsetWidth - minOffset) * w),
+    );
     if (newShowEach != 1 && newShowEach % 2 != 0) {
       newShowEach++;
     }
