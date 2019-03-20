@@ -17,18 +17,7 @@ function Chart(parent, data, options) {
   const state = State(options);
 
   data = prepareData(data);
-  state.patch({
-    maxLineValue: _.reduce(
-      data.lData,
-      (max, ld) => (max !== null ? Math.max(max, _.max(ld.data)) : _.max(ld.data)),
-      null,
-    ),
-    minLineValue: _.reduce(
-      data.lData,
-      (min, ld) => (min !== null ? Math.min(min, _.min(ld.data)) : _.min(ld.data)),
-      null,
-    ),
-  });
+  updateBoundaries(data, state);
 
   state.before('frameStart', (ev) => {
     let v = ev.currentValue;
@@ -63,6 +52,9 @@ function Chart(parent, data, options) {
     legend.render(state);
   }
   parent.appendChild(element);
+  state.on(['frameStart', 'frameEnd', 'hiddenLines'], () => {
+    updateBoundaries(data, state);
+  });
   return { element, render, grid, axisX, minimap, legend };
 }
 
@@ -86,5 +78,29 @@ function prepareData(data) {
     })
     .value();
   return { xName, xData, lNames, lData };
+}
+
+function updateBoundaries(data, state) {
+  if (!data.lData.length) return;
+
+  let maxLineValue = null;
+  let minLineValue = null;
+  const from = Math.round(data.lData[0].data.length * state.frameStart);
+  const to = Math.round(data.lData[0].data.length * state.frameEnd);
+  for (let x = from; x < to; x++) {
+    for (let l = 0; l < data.lData.length; l++) {
+      let ld = data.lData[l];
+      if (!state.hiddenLines || !state.hiddenLines[ld.id]) {
+        if (maxLineValue === null || maxLineValue < ld.data[x]) {
+          maxLineValue = ld.data[x];
+        }
+        if (minLineValue === null || minLineValue > ld.data[x]) {
+          minLineValue = ld.data[x];
+        }
+      }
+    }
+  }
+  if (maxLineValue === null || minLineValue === null) return;
+  state.patch({ maxLineValue, minLineValue });
 }
 export default Chart;

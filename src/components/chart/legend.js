@@ -19,9 +19,9 @@ function Legend(parent, data, state) {
       `<path fill="#FFFFFF" d="${mdiCheck}"/></svg></div><span>${ld.name}</span></label>`,
     ].join('');
     label.getElementsByTagName('INPUT')[0].addEventListener('change', function() {
-      // let patch = { hiddenLines: { ...state.hiddenLines } };
-      // patch[this.value] = this.checked;
-      // state.patch(patch);
+      let patch = { hiddenLines: { ...state.hiddenLines } };
+      patch.hiddenLines[this.value] = !this.checked;
+      state.patch(patch);
     });
     element.appendChild(label);
   });

@@ -7,19 +7,6 @@ function Grid(parent, data, state) {
   element.classList.add('chart-grid');
   element.setAttribute('draggable', false);
 
-  state.patch({
-    maxLineValue: _.reduce(
-      data.lData,
-      (max, ld) => (max !== null ? Math.max(max, _.max(ld.data)) : _.max(ld.data)),
-      null,
-    ),
-    minLineValue: _.reduce(
-      data.lData,
-      (min, ld) => (min !== null ? Math.min(min, _.min(ld.data)) : _.min(ld.data)),
-      null,
-    ),
-  });
-
   const lines = {};
   _.each(data.lData, (ld) => {
     lines[ld.id] = Line(element, ld, state, { lineWidth: 5 });
@@ -30,6 +17,10 @@ function Grid(parent, data, state) {
       l.render(state);
     });
   }
+
+  state.on('hiddenLines', () => {
+    render(state);
+  });
   parent.appendChild(element);
   return { render, element, lines };
 }

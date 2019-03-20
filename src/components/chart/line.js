@@ -22,20 +22,20 @@ function Line(parent, data, state, options) {
   }
   function renderSVG(state) {
     let scale = calcScale(state);
-    if (scale != scaleY) {
-      scaleY = scale;
-      let bottom = Math.round(Math.min(0, state.minLineValue) * scale);
-      let top = Math.round(Math.max(0, state.maxLineValue) * scale);
-      let d = 'M ';
-      for (var x = 0; x < data.data.length; x++) {
-        d += `${x} ${top - Math.round(data.data[x] * scale) + bottom} `;
-        if (x == 0) d += 'L ';
-      }
-      element.innerHTML = `<path d="${d}" stroke="${data.color}" stroke-width="${
-        options.lineWidth
-      }" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/>`;
-      element.setAttribute('viewBox', `0 ${bottom - 1} ${data.data.length - 1} ${top + 1}`);
+    // if (scale != scaleY) {
+    scaleY = scale;
+    let bottom = Math.round(Math.min(0, state.minLineValue) * scale);
+    let top = Math.round(Math.max(0, state.maxLineValue) * scale);
+    let d = 'M ';
+    for (var x = 0; x < data.data.length; x++) {
+      d += `${x} ${top - Math.round(data.data[x] * scale) + bottom} `;
+      if (x == 0) d += 'L ';
     }
+    element.innerHTML = `<path d="${d}" stroke="${data.color}" stroke-width="${
+      options.lineWidth
+    }" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/>`;
+    element.setAttribute('viewBox', `0 ${bottom - 1} ${data.data.length - 1} ${top + 1}`);
+    // }
     return scaleY;
   }
   function renderClip(state) {
@@ -48,6 +48,11 @@ function Line(parent, data, state, options) {
     }
   }
   function render(state) {
+    if (state.hiddenLines && state.hiddenLines[data.id]) {
+      element.classList.add('hidden');
+    } else {
+      element.classList.remove('hidden');
+    }
     renderSVG(state);
     renderClip(state);
   }
@@ -61,6 +66,7 @@ function Line(parent, data, state, options) {
       renderClip(state);
     });
   }
+
   return { render, element };
 }
 export default Line;
