@@ -9,29 +9,29 @@ import Legend from './legend';
 function Chart(parent, data, options) {
   options = _.merge(
     {
-      frameStart: 0.5,
-      frameEnd: 1,
+      clipStart: 0.5,
+      clipEnd: 1,
     },
     options || {},
   );
   const state = State(options);
 
-  data = prepareData(data);
+  data = prepareData(data, state);
   updateBoundaries(data, state);
 
-  state.before('frameStart', (ev) => {
+  state.before('clipStart', (ev) => {
     let v = ev.currentValue;
-    if (v > state.frameEnd - 0.05) {
-      v = state.frameEnd - 0.05;
+    if (v > state.clipEnd - 0.05) {
+      v = state.clipEnd - 0.05;
     }
     v = v > 0 ? (v < 0.95 ? v : 0.95) : 0;
     return v;
   });
 
-  state.before('frameEnd', (ev) => {
+  state.before('clipEnd', (ev) => {
     let v = ev.currentValue;
-    if (v < state.frameStart + 0.05) {
-      v = state.frameStart + 0.05;
+    if (v < state.clipStart + 0.05) {
+      v = state.clipStart + 0.05;
     }
     v = v < 1 ? (v > 0.05 ? v : 0.05) : 1;
     return v;
@@ -52,13 +52,13 @@ function Chart(parent, data, options) {
     legend.render(state);
   }
   parent.appendChild(element);
-  state.on(['frameStart', 'frameEnd', 'hiddenLines'], () => {
+  state.on(['clipStart', 'clipEnd', 'hiddenLines'], () => {
     updateBoundaries(data, state);
   });
   return { element, render, grid, axisX, minimap, legend };
 }
 
-function prepareData(data) {
+function prepareData(data, state) {
   const xName = _.findKey(data.types, (t) => t == 'x');
   const xData = _.drop(_.find(data.columns, (c) => c[0] == xName));
 
@@ -77,30 +77,48 @@ function prepareData(data) {
       };
     })
     .value();
+
+  let maxValue = null;
+  let minValue = null;
+
+  for (let x = 0; x < lData[0].data.length; x++) {
+    for (let l = 0; l < lData.length; l++) {
+      let ld = lData[l];
+      if (maxValue === null || maxValue < ld.data[x]) {
+        maxValue = ld.data[x];
+      }
+      if (minValue === null || minValue > ld.data[x]) {
+        minValue = ld.data[x];
+      }
+    }
+  }
+
+  state.patch({ maxValue, minValue });
+
   return { xName, xData, lNames, lData };
 }
 
 function updateBoundaries(data, state) {
   if (!data.lData.length) return;
 
-  let maxLineValue = null;
-  let minLineValue = null;
-  const from = Math.round(data.lData[0].data.length * state.frameStart);
-  const to = Math.round(data.lData[0].data.length * state.frameEnd);
+  let maxClipValue = null;
+  let minClipValue = null;
+  const from = Math.round(data.lData[0].data.length * state.clipStart);
+  const to = Math.round(data.lData[0].data.length * state.clipEnd);
   for (let x = from; x < to; x++) {
     for (let l = 0; l < data.lData.length; l++) {
       let ld = data.lData[l];
       if (!state.hiddenLines || !state.hiddenLines[ld.id]) {
-        if (maxLineValue === null || maxLineValue < ld.data[x]) {
-          maxLineValue = ld.data[x];
+        if (maxClipValue === null || maxClipValue < ld.data[x]) {
+          maxClipValue = ld.data[x];
         }
-        if (minLineValue === null || minLineValue > ld.data[x]) {
-          minLineValue = ld.data[x];
+        if (minClipValue === null || minClipValue > ld.data[x]) {
+          minClipValue = ld.data[x];
         }
       }
     }
   }
-  if (maxLineValue === null || minLineValue === null) return;
-  state.patch({ maxLineValue, minLineValue });
+  if (maxClipValue === null || minClipValue === null) return;
+  state.patch({ maxClipValue, minClipValue });
 }
 export default Chart;

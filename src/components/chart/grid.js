@@ -18,9 +18,6 @@ function Grid(parent, data, state) {
     });
   }
 
-  state.on('hiddenLines', () => {
-    render(state);
-  });
   parent.appendChild(element);
   return { render, element, lines };
 }

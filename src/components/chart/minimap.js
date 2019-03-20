@@ -58,10 +58,10 @@ function Minimap(parent, lData, state) {
   hammer.on('panmove', function(ev) {
     let patch = {};
     if (target.left) {
-      patch.frameStart = stateB4.frameStart + ev.deltaX / element.offsetWidth;
+      patch.clipStart = stateB4.clipStart + ev.deltaX / element.offsetWidth;
     }
     if (target.right) {
-      patch.frameEnd = stateB4.frameEnd + ev.deltaX / element.offsetWidth;
+      patch.clipEnd = stateB4.clipEnd + ev.deltaX / element.offsetWidth;
     }
     if (target.left || target.right) {
       state.patch(patch);
@@ -74,20 +74,20 @@ function Minimap(parent, lData, state) {
     target = null;
   });
 
-  state.on(['frameStart', 'frameEnd'], (e) => {
+  state.on(['clipStart', 'clipEnd'], (e) => {
     renderFrame(state);
   });
 
   function renderFrame(state) {
-    leftCover.style = 'right:' + (100 - state.frameStart * 100) + '%;';
-    leftHandle.style = 'left:' + state.frameStart * 100 + '%;';
+    leftCover.style = 'right:' + (100 - state.clipStart * 100) + '%;';
+    leftHandle.style = 'left:' + state.clipStart * 100 + '%;';
 
-    rightHandle.style = 'right:' + (100 - state.frameEnd * 100) + '%;';
-    rightCover.style = 'left:' + state.frameEnd * 100 + '%;';
+    rightHandle.style = 'right:' + (100 - state.clipEnd * 100) + '%;';
+    rightCover.style = 'left:' + state.clipEnd * 100 + '%;';
 
     frame.style = [
-      `left:calc(${state.frameStart * 100}% + ${gripWidth}px);`,
-      `right:calc(${100 - state.frameEnd * 100}% + ${gripWidth}px);`,
+      `left:calc(${state.clipStart * 100}% + ${gripWidth}px);`,
+      `right:calc(${100 - state.clipEnd * 100}% + ${gripWidth}px);`,
     ].join('');
   }
   function render(state) {

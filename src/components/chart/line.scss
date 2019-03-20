@@ -1,11 +1,11 @@
 @import "cfg";
 
 svg.line {
-  transition-property: opacity;
-  transition-duration: 0.5s;
+  transition-property: opacity, height;
+  transition-duration: 0.3s;
   transition-timing-function: ease-out;
   position: absolute;
-  top: 0;
+  bottom: 0;
   // right: 0;
   // bottom: 26px;
   left: 0;

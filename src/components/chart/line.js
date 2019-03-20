@@ -13,19 +13,13 @@ function Line(parent, data, state, options) {
   // element.setAttribute('height', '100%');
   let scaleY;
   parent.appendChild(element);
-  function calcScale(state) {
-    let limit = Math.max(Math.abs(state.maxLineValue), Math.abs(state.minLineValue));
-    if (limit > 1000) {
-      return 1000 / limit;
-    }
-    return 1;
-  }
+
   function renderSVG(state) {
     let scale = calcScale(state);
     // if (scale != scaleY) {
     scaleY = scale;
-    let bottom = Math.round(Math.min(0, state.minLineValue) * scale);
-    let top = Math.round(Math.max(0, state.maxLineValue) * scale);
+    let bottom = Math.round(Math.min(0, state.minValue) * scale);
+    let top = Math.round(Math.max(0, state.maxValue) * scale);
     let d = 'M ';
     for (var x = 0; x < data.data.length; x++) {
       d += `${x} ${top - Math.round(data.data[x] * scale) + bottom} `;
@@ -40,11 +34,20 @@ function Line(parent, data, state, options) {
   }
   function renderClip(state) {
     if (!options.fullWidth) {
-      let clipW = state.frameEnd - state.frameStart;
+      let scale = calcScale(state);
+      let bottom = Math.round(Math.min(0, state.minValue) * scale);
+      let top = Math.round(Math.max(0, state.maxValue) * scale);
+      let clipBottom = Math.round(Math.min(0, state.minClipValue) * scale);
+      let clipTop = Math.round(Math.max(0, state.maxClipValue) * scale);
+      let h = (top - bottom) / (clipTop - clipBottom);
+
+      let clipW = state.clipEnd - state.clipStart;
       let w = 1 / clipW;
-      let l = -state.frameStart * w;
+      let l = -state.clipStart * w;
       // element.style = `width:${w * 100}%;left:${l * 100}%;`;
-      element.style = `width:${w * 100}%;transform:translate3d(${l * clipW * 100}%,0,0);`;
+      element.style = `height:${h * 100}%;width:${w * 100}%;transform:translate3d(${l *
+        clipW *
+        100}%,0,0);`;
     }
   }
   function render(state) {
@@ -57,16 +60,29 @@ function Line(parent, data, state, options) {
     renderClip(state);
   }
 
-  state.on(['maxLineValue', 'minLineValue'], (e) => {
+  state.on(['maxValue', 'minValue'], (e) => {
     renderSVG(state);
   });
 
   if (!options.fullWidth) {
-    state.on(['frameStart', 'frameEnd', 'maxLineValue', 'minLineValue'], (e) => {
+    state.on(['clipStart', 'clipEnd', 'maxClipValue', 'minClipValue'], (e) => {
       renderClip(state);
     });
   }
 
+  state.on('hiddenLines', () => {
+    render(state);
+  });
+
   return { render, element };
 }
+
+function calcScale(state) {
+  let limit = Math.max(Math.abs(state.maxValue), Math.abs(state.minValue));
+  if (limit > 1000) {
+    return 1000 / limit;
+  }
+  return 1;
+}
+
 export default Line;

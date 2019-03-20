@@ -20,9 +20,9 @@ function AxisX(parent, data, state) {
   parent.appendChild(element);
 
   function render() {
-    let clipW = state.frameEnd - state.frameStart;
+    let clipW = state.clipEnd - state.clipStart;
     let w = 1 / clipW;
-    let l = -state.frameStart * w;
+    let l = -state.clipStart * w;
     // element.style = `width:calc(${w * 100}% - 100px);left:${l * 100}%`;
     element.style = `width:calc(${w * 100}% - ${minOffset}px);transform:translate3d(${l *
       clipW *
@@ -49,7 +49,7 @@ function AxisX(parent, data, state) {
     }
   }
   renderLabels = _.throttle(renderLabels, 150);
-  state.on(['frameStart', 'frameEnd'], (e) => {
+  state.on(['clipStart', 'clipEnd'], (e) => {
     render(state);
   });
   return { render, element };
