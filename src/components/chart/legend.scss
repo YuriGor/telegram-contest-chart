@@ -51,6 +51,7 @@
         &:after {
           transition-property: height,width,opacity;
           transition-duration: 0.3s;
+          transition-timing-function: ease-out;
           transition-delay: 0s;
           position:absolute;
           background: #FFF;

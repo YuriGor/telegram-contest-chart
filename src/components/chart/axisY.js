@@ -34,20 +34,24 @@ function AxisY(parent, data, state) {
       step--;
       scale = (step * 5 * scale) / floorAxisTop;
     }
-    // if(scale<0.95){
-    //   let betterStep=step;
-    //   let betterScale=scale;
-    //   while(betterStep*5<=){
-    //     betterStep++;
-    //   }
-    // }
     element.style = `height:calc(${scale * 100}% - ${scale * labelHeight}px);`;
     let lv = 0;
-    _.eachRight(labels, (l) => {
-      l.innerHTML = lv;
+    for (let i = labels.length - 1; i >= 0; i--) {
+      let l = labels[i];
+      if (l.innerHTML != lv) {
+        l.classList.add('fade-up');
+        labels[i] = document.createElement('span');
+        labels[i].innerHTML = lv;
+        l.parentNode.appendChild(labels[i]);
+        _.delay(() => {
+          l.remove();
+        }, 500);
+      }
+      // l.innerHTML = lv;
       lv += step;
-    });
+    }
   }
+  render = _.throttle(render, 1000);
   state.on('gridHeights', () => render(state));
   return { render, parent };
 }
