@@ -1,17 +1,26 @@
+@import "cfg";
 .axis-y {
-  position:absolute;
-  left:0;
+  transition-duration: $panTransition;
+  transition-property: height;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
   width: 100%;
-  height: 100%;
+  height: calc(100% - #{$yLabelHeight});
+  pointer-events: none;
+  div {
+    border-bottom: 1px solid rgba(#000,0.2);
+    display: block;
+    height: 20%;
+    position: relative;
+    top: -20%;
   span {
-    transition-duration: 0.5s;
-    transition-property: opacity;
+    background: rgba(#FFF, 0.5);
+    border-radius: 50%;
     position:absolute;
-    opacity: 0;
+    bottom:4px;
     color: #96a2aa;
-    font-size: 23px;
-    &.show{
-      opacity: 1;
-    }
+    font-size: $axisHeight/2;
+  }
   }
 }

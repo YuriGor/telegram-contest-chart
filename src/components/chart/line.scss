@@ -2,7 +2,7 @@
 
 svg.line {
   transition-property: opacity, height;
-  transition-duration: 0.3s;
+  transition-duration: $panTransition;
   transition-timing-function: ease-out;
   position: absolute;
   bottom: 0;

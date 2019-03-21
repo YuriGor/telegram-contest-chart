@@ -5,9 +5,8 @@
   "private": true,
   "scripts": {
     "scsscfg": "node ./scsscfg",
-    "build": "npm run scsscfg && webpack",
+    "build": "npm run scsscfg && webpack --mode=production",
     "start": "npm run scsscfg && webpack-dev-server",
-    "produce": "NODE_ENV=production npm run-script build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -45,9 +44,7 @@
     "webpack-dev-server": "^3.2.1"
   },
   "dependencies": {
-    "@mdi/js": "^3.5.95",
     "hammerjs": "^2.0.8",
-    "lodash": "^4.17.11",
-    "moment": "^2.24.0"
+    "lodash": "^4.17.11"
   }
 }

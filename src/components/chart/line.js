@@ -11,43 +11,32 @@ function Line(parent, data, state, options) {
   element.setAttribute('draggable', false);
   // element.setAttribute('width', '100%');
   // element.setAttribute('height', '100%');
-  let scaleY;
   parent.appendChild(element);
 
   function renderSVG(state) {
-    let scale = calcScale(state);
-    // if (scale != scaleY) {
-    scaleY = scale;
-    let bottom = Math.round(Math.min(0, state.minValue) * scale);
-    let top = Math.round(Math.max(0, state.maxValue) * scale);
     let d = 'M ';
     for (var x = 0; x < data.data.length; x++) {
-      d += `${x} ${top - Math.round(data.data[x] * scale) + bottom} `;
+      d += `${x} ${state.gridHeights.top -
+        Math.round(data.data[x] * state.gridHeights.scale) +
+        state.gridHeights.bottom} `;
       if (x == 0) d += 'L ';
     }
     element.innerHTML = `<path d="${d}" stroke="${data.color}" stroke-width="${
       options.lineWidth
     }" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/>`;
-    element.setAttribute('viewBox', `0 ${bottom - 1} ${data.data.length - 1} ${top + 1}`);
-    // }
-    return scaleY;
+    element.setAttribute(
+      'viewBox',
+      `0 ${state.gridHeights.bottom - 1} ${data.data.length - 1} ${state.gridHeights.top + 1}`,
+    );
   }
   function renderClip(state) {
     if (!options.fullWidth) {
-      let scale = calcScale(state);
-      let bottom = Math.round(Math.min(0, state.minValue) * scale);
-      let top = Math.round(Math.max(0, state.maxValue) * scale);
-      let clipBottom = Math.round(Math.min(0, state.minClipValue) * scale);
-      let clipTop = Math.round(Math.max(0, state.maxClipValue) * scale);
-      let h = (top - bottom) / (clipTop - clipBottom);
-
       let clipW = state.clipEnd - state.clipStart;
       let w = 1 / clipW;
       let l = -state.clipStart * w;
       // element.style = `width:${w * 100}%;left:${l * 100}%;`;
-      element.style = `height:${h * 100}%;width:${w * 100}%;transform:translate3d(${l *
-        clipW *
-        100}%,0,0);`;
+      element.style = `height:${state.gridHeights.clipScale * 100}%;width:${w *
+        100}%;transform:translate3d(${l * clipW * 100}%,0,0);`;
     }
   }
   function render(state) {
@@ -60,29 +49,21 @@ function Line(parent, data, state, options) {
     renderClip(state);
   }
 
-  state.on(['maxValue', 'minValue'], (e) => {
+  state.on(['minValue', 'maxValue'], () => {
     renderSVG(state);
   });
 
+  state.on(['hiddenLines'], () => {
+    render(state);
+  });
+
   if (!options.fullWidth) {
-    state.on(['clipStart', 'clipEnd', 'maxClipValue', 'minClipValue'], (e) => {
+    state.on(['gridHeights', 'clipStart', 'clipEnd'], () => {
       renderClip(state);
     });
   }
 
-  state.on('hiddenLines', () => {
-    render(state);
-  });
-
   return { render, element };
-}
-
-function calcScale(state) {
-  let limit = Math.max(Math.abs(state.maxValue), Math.abs(state.minValue));
-  if (limit > 1000) {
-    return 1000 / limit;
-  }
-  return 1;
 }
 
 export default Line;

@@ -1,35 +1,34 @@
 import _ from 'lodash';
-import moment from 'moment';
-import './axisX.scss';
+import cfg from './cfg';
+import './axisY.scss';
 
-function AxisX(parent, data, state) {
+function AxisY(parent, data, state) {
   let element = document.createElement('div');
-  element.classList.add('axis-x');
-  let labelsX = [];
-  let xName = _.findKey(data.types, (t) => t == 'x');
-  let xData = _.drop(_.find(data.columns, (c) => c[0] == xName));
-  let minOffset = 300;
-  let showEach = 1;
-  let percentOffset = 100 / xData.length;
-  _.each(xData, (d, i) => {
-    let lx = document.createElement('span');
-    lx.innerHTML = moment(d).format('MMM D');
-    lx.style = 'left:' + percentOffset * i + '%;';
-    labelsX.push(lx);
-    element.appendChild(lx);
-  });
-  parent.appendChild(element);
-  function render() {
-    let newShowEach = Math.round((xData.length * minOffset) / element.offsetWidth);
-    if (Math.abs(newShowEach - showEach) > 2) {
-      // console.log('newShowEach:' + newShowEach);
-      showEach = newShowEach;
-      _.eachRight(labelsX, (l, i) => {
-        i = labelsX.length - i - 1;
-        l.className = i % showEach == 0 ? 'show' : '';
-      });
-    }
+  element.classList.add('axis-y');
+  const labels = [];
+  for (let i = 0; i < 6; i++) {
+    let block = document.createElement('div');
+    let lbl = document.createElement('span');
+    block.appendChild(lbl);
+    element.appendChild(block);
+    labels.push(lbl);
   }
+  parent.appendChild(element);
+
+  function render(state) {
+    let scale = 1;
+    let topValueOffset = cfg.yLabelHeight.substr(0, cfg.yLabelHeight - 2) / state.gridHeights.scale;
+    let topValue = state.maxClipValue - topValueOffset;
+    let step = Math.round(topValue / 5);
+    element.style = `height:calc(${scale * 100}% - ${cfg.yLabelHeight});`;
+    let lv = 0;
+    _.eachRight(labels, (l) => {
+      l.innerHTML = lv;
+      lv += step;
+    });
+  }
+  state.on('gridHeights', () => render(state));
   return { render, parent };
 }
-export default AxisX;
+
+export default AxisY;

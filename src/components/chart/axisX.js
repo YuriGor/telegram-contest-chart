@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import moment from 'moment';
+// import moment from 'moment';
 import './axisX.scss';
 import dynamicCssRule from '../../lib/dynamicCssRule';
 
@@ -10,9 +10,10 @@ function AxisX(parent, data, state) {
   let minOffset = 180;
   let showEach = 1;
   let percentOffset = 100 / data.length;
+  let formatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' });
   _.each(data, (d, i) => {
     let lx = document.createElement('span');
-    lx.innerHTML = moment(d).format('MMM DD');
+    lx.innerHTML = formatter.format(new Date(d));
     lx.style = 'left:' + percentOffset * i + '%;';
     labelsX.push(lx);
     element.appendChild(lx);
