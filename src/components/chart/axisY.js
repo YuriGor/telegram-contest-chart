@@ -17,10 +17,31 @@ function AxisY(parent, data, state) {
 
   function render(state) {
     let scale = 1;
-    let topValueOffset = cfg.yLabelHeight.substr(0, cfg.yLabelHeight - 2) / state.gridHeights.scale;
-    let topValue = state.maxClipValue - topValueOffset;
-    let step = Math.round(topValue / 5);
-    element.style = `height:calc(${scale * 100}% - ${cfg.yLabelHeight});`;
+    let labelHeight = parseInt(cfg.yLabelHeight.substr(0, cfg.yLabelHeight.length - 2));
+    let clipHeight = element.parentNode.offsetHeight; // -> clipTop
+    let preciseAxisHeight = element.parentNode.offsetHeight - labelHeight; // if scale = 1
+    let preciseAxisTop = (preciseAxisHeight * state.gridHeights.clipTop) / clipHeight;
+    let floorAxisTop = Math.floor(preciseAxisTop);
+    scale = floorAxisTop / preciseAxisTop;
+
+    let step = Math.round(floorAxisTop / 5) || 1;
+    scale = (step * 5 * scale) / floorAxisTop;
+    while (floorAxisTop > 5 && scale < 0.8) {
+      step++;
+      scale = (step * 5 * scale) / floorAxisTop;
+    }
+    while (floorAxisTop > 5 && scale > 1 && step > 2) {
+      step--;
+      scale = (step * 5 * scale) / floorAxisTop;
+    }
+    // if(scale<0.95){
+    //   let betterStep=step;
+    //   let betterScale=scale;
+    //   while(betterStep*5<=){
+    //     betterStep++;
+    //   }
+    // }
+    element.style = `height:calc(${scale * 100}% - ${scale * labelHeight}px);`;
     let lv = 0;
     _.eachRight(labels, (l) => {
       l.innerHTML = lv;

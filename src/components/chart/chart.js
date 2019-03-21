@@ -9,7 +9,7 @@ import Legend from './legend';
 function Chart(parent, data, options) {
   options = _.merge(
     {
-      clipStart: 0.5,
+      clipStart: 0,
       clipEnd: 1,
     },
     options || {},

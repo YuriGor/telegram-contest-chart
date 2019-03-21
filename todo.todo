@@ -1,5 +1,6 @@
 
+- disable clip reducing on dragging over edges
 - use lodash-es
-- remove moment.js
++- remove moment.js
 +- extract key visual options into cfg.js and generate cfg.scss for it via preval to keep it in one place
 +- pan by translate

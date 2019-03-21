@@ -13,23 +13,25 @@ function Legend(parent, data, state) {
     // let id = _.kebabCase(state.title + ld.id);
     label.innerHTML = [
       `<label><input type="checkbox" checked value="${ld.id}">`,
-      `<div class="icon"><svg style="width:60px;height:60px;background:${
+      `<span class="icon"><svg style="width:60px;height:60px;background:${
         ld.color
       }" viewBox="0 0 24 24">`,
-      `<path fill="#FFFFFF" d="${mdiCheck}"/></svg></div><span>${ld.name}</span></label>`,
+      `<path fill="#FFFFFF" d="${mdiCheck}"/></svg></span><span>${ld.name}</span></label>`,
     ].join('');
     label.getElementsByTagName('INPUT')[0].addEventListener('change', function() {
-      let patch = { hiddenLines: { ...state.hiddenLines } };
-      patch.hiddenLines[this.value] = !this.checked;
-      state.patch(patch);
+      _.defer(() => {
+        let patch = { hiddenLines: { ...state.hiddenLines } };
+        patch.hiddenLines[this.value] = !this.checked;
+        state.patch(patch);
+      });
     });
     element.appendChild(label);
   });
   parent.appendChild(element);
   function render(state) {
-    _.each(element.getElementsByTagName('INPUT'), (ch) => {
-      //ch.checked = state.hiddenLines[ch.value] !== undefined;
-    });
+    // _.each(element.getElementsByTagName('INPUT'), (ch) => {
+    //   //ch.checked = state.hiddenLines[ch.value] !== undefined;
+    // });
   }
   state.on('hiddenLines', () => {
     render(state);

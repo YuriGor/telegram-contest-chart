@@ -26,7 +26,7 @@ function Line(parent, data, state, options) {
     }" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/>`;
     element.setAttribute(
       'viewBox',
-      `0 ${state.gridHeights.bottom - 1} ${data.data.length - 1} ${state.gridHeights.top + 1}`,
+      `0 ${state.gridHeights.bottom} ${data.data.length} ${state.gridHeights.top}`,
     );
   }
   function renderClip(state) {
@@ -35,7 +35,7 @@ function Line(parent, data, state, options) {
       let w = 1 / clipW;
       let l = -state.clipStart * w;
       // element.style = `width:${w * 100}%;left:${l * 100}%;`;
-      element.style = `height:${state.gridHeights.clipScale * 100}%;width:${w *
+      element.style = `height:${state.gridHeights.clipScale * 99.4}%;width:${w *
         100}%;transform:translate3d(${l * clipW * 100}%,0,0);`;
     }
   }

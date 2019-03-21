@@ -9,5 +9,6 @@
   width:100%;
   height: calc(100% - #{$axisHeight} - #{$minimapHeight} - #{$legendHeight} - #{$headerHeight});
   // left: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
