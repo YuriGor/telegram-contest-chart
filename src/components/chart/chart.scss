@@ -4,7 +4,9 @@
   position: relative;
   // height: 95vw;
   height: 90vh;
+  min-height: 900px;
   user-select: none;
+  overflow: hidden;
   * {
     box-sizing: border-box;
   }

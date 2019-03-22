@@ -11,7 +11,7 @@ function AxisX(parent, data, state) {
   let showEach = 1;
   let percentOffset = 100 / data.length;
   let formatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' });
-  _.each(data, (d, i) => {
+  data.forEach((d, i) => {
     let lx = document.createElement('span');
     lx.innerHTML = formatter.format(new Date(d));
     lx.style = 'left:' + percentOffset * i + '%;';

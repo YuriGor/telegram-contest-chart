@@ -1,0 +1,30 @@
+@import "cfg";
+
+.chart-details-ruler {
+  transition-property: opacity;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
+  position: absolute;
+  left: 0;
+  //transform: translate3d(50%,-200%,0);
+  opacity: 0;
+  // width:2px;
+  // height: 100%;
+  &.show {
+    opacity: 1;
+  }
+}
+
+.chart-details-dot {
+  transition-property: top, opacity;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
+  position: absolute;
+  left: 0;
+  //transform: translate3d(50%,-200%,0);
+  opacity: 0;
+  z-index: 3;
+  &.show {
+    opacity: 1;
+  }
+}

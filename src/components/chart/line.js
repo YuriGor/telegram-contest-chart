@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import './line.scss';
 
 function Line(parent, data, state, options) {
-  options = _.merge({ lineWidth: 1 }, options || {});
+  options = { ...{ lineWidth: 1 }, ...options };
 
   var svgNS = 'http://www.w3.org/2000/svg';
   let element = document.createElementNS(svgNS, 'svg');
@@ -16,18 +15,15 @@ function Line(parent, data, state, options) {
   function renderSVG(state) {
     let d = 'M ';
     for (var x = 0; x < data.data.length; x++) {
-      d += `${x} ${state.gridHeights.top -
-        Math.round(data.data[x] * state.gridHeights.scale) +
-        state.gridHeights.bottom} `;
+      d += `${x} ${state.grid_top -
+        Math.round(data.data[x] * state.grid_scale) +
+        state.grid_bottom} `;
       if (x == 0) d += 'L ';
     }
     element.innerHTML = `<path d="${d}" stroke="${data.color}" stroke-width="${
       options.lineWidth
     }" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/>`;
-    element.setAttribute(
-      'viewBox',
-      `0 ${state.gridHeights.bottom} ${data.data.length} ${state.gridHeights.top}`,
-    );
+    element.setAttribute('viewBox', `0 ${state.grid_bottom} ${data.data.length} ${state.grid_top}`);
   }
   function renderClip(state) {
     if (!options.fullWidth) {
@@ -35,7 +31,7 @@ function Line(parent, data, state, options) {
       let w = 1 / clipW;
       let l = -state.clipStart * w;
       // element.style = `width:${w * 100}%;left:${l * 100}%;`;
-      element.style = `height:${state.gridHeights.clipScale * 99.4}%;width:${w *
+      element.style = `height:${state.grid_clipScale * 99.4}%;width:${w *
         100}%;transform:translate3d(${l * clipW * 100}%,0,0);`;
     }
   }
@@ -48,8 +44,7 @@ function Line(parent, data, state, options) {
     renderSVG(state);
     renderClip(state);
   }
-
-  state.on(['minValue', 'maxValue'], () => {
+  state.on(['grid_top', 'grid_scale', 'grid_bottom'], () => {
     renderSVG(state);
   });
 
@@ -58,7 +53,7 @@ function Line(parent, data, state, options) {
   });
 
   if (!options.fullWidth) {
-    state.on(['gridHeights', 'clipStart', 'clipEnd'], () => {
+    state.on(['grid_clipScale', 'clipStart', 'clipEnd'], () => {
       renderClip(state);
     });
   }

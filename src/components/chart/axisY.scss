@@ -9,7 +9,7 @@
   height: calc(100% - #{$yLabelHeight});
   pointer-events: none;
   div {
-    border-bottom: 1px solid rgba(#000,0.2);
+    border-bottom: 1px solid rgba(#000,0.1);
     display: block;
     height: 20%;
     position: relative;
@@ -25,6 +25,10 @@
     font-size: $axisHeight/2;
     &.fade-up {
       bottom:$axisHeight;
+      opacity: 0;
+    }
+    &.fade-down {
+      bottom:-$axisHeight;
       opacity: 0;
     }
   }

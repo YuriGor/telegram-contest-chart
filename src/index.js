@@ -34,8 +34,13 @@ fetch('data/canonical.json')
         title: `Awesome Chart ${i + 1} / ${dataArray.length}`,
       });
       chart.render();
+      let rerender = _.throttle(() => {
+        _.defer(() => {
+          chart.render();
+        });
+      }, 1000);
       window.addEventListener('resize', function(event) {
-        chart.render();
+        rerender();
       });
       return chart;
     });

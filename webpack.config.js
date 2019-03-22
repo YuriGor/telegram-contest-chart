@@ -1,3 +1,4 @@
+var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -26,10 +27,11 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader',
           options: {
+            plugins: ['lodash'],
             presets: ['@babel/preset-env'],
           },
         },
@@ -47,6 +49,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new LodashModuleReplacementPlugin({
+      collections: true,
+    }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional

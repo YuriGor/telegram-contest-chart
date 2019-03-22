@@ -7,13 +7,13 @@ import Minimap from './minimap';
 import Legend from './legend';
 
 function Chart(parent, data, options) {
-  options = _.merge(
-    {
+  options = {
+    ...{
       clipStart: 0,
       clipEnd: 1,
     },
-    options || {},
-  );
+    ...options,
+  };
   const state = State(options);
 
   data = prepareData(data, state);
@@ -62,12 +62,9 @@ function prepareData(data, state) {
   const xName = _.findKey(data.types, (t) => t == 'x');
   const xData = _.drop(_.find(data.columns, (c) => c[0] == xName));
 
-  const lNames = _(data.types)
-    .pickBy((t) => t == 'line')
-    .keys()
-    .value();
-  const lData = _(data.columns)
-    .filter((c) => _.includes(lNames, c[0]))
+  const lNames = Object.keys(_.pickBy(data.types, (t) => t == 'line'));
+  const lData = data.columns
+    .filter((c) => lNames.includes(c[0]))
     .map((c) => {
       return {
         id: c[0],
@@ -75,8 +72,7 @@ function prepareData(data, state) {
         name: data.names[c[0]],
         color: data.colors[c[0]],
       };
-    })
-    .value();
+    });
 
   let maxValue = null;
   let minValue = null;

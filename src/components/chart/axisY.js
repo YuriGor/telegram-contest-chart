@@ -20,7 +20,7 @@ function AxisY(parent, data, state) {
     let labelHeight = parseInt(cfg.yLabelHeight.substr(0, cfg.yLabelHeight.length - 2));
     let clipHeight = element.parentNode.offsetHeight; // -> clipTop
     let preciseAxisHeight = element.parentNode.offsetHeight - labelHeight; // if scale = 1
-    let preciseAxisTop = (preciseAxisHeight * state.gridHeights.clipTop) / clipHeight;
+    let preciseAxisTop = (preciseAxisHeight * state.grid_clipTop) / clipHeight;
     let floorAxisTop = Math.floor(preciseAxisTop);
     scale = floorAxisTop / preciseAxisTop;
 
@@ -39,7 +39,11 @@ function AxisY(parent, data, state) {
     for (let i = labels.length - 1; i >= 0; i--) {
       let l = labels[i];
       if (l.innerHTML != lv) {
-        l.classList.add('fade-up');
+        if (parseInt(l.innerHTML) > lv) {
+          l.classList.add('fade-up');
+        } else {
+          l.classList.add('fade-down');
+        }
         labels[i] = document.createElement('span');
         labels[i].innerHTML = lv;
         l.parentNode.appendChild(labels[i]);
@@ -51,8 +55,8 @@ function AxisY(parent, data, state) {
       lv += step;
     }
   }
-  render = _.throttle(render, 1000);
-  state.on('gridHeights', () => render(state));
+  render = _.throttle(render, 500);
+  state.on('grid_clipTop', () => render(state));
   return { render, parent };
 }
 

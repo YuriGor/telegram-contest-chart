@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Hammer from 'hammerjs';
 import './minimap.scss';
 import Line from './line';
@@ -10,9 +9,9 @@ function Minimap(parent, lData, state) {
   element.classList.add('chart-minimap');
   element.setAttribute('draggable', false);
 
-  const lines = {};
-  _.each(lData, (ld) => {
-    lines[ld.id] = Line(element, ld, state, { lineWidth: 2, fullWidth: true });
+  const lines = [];
+  lData.forEach((ld) => {
+    lines.push(Line(element, ld, state, { lineWidth: 2, fullWidth: true }));
   });
 
   let leftCover = document.createElement('div');
@@ -41,7 +40,7 @@ function Minimap(parent, lData, state) {
   var hammer = new Hammer(element);
   hammer.get('pan').set({ threshold: 0 });
   hammer.on('panstart', function(ev) {
-    stateB4 = _.clone(state);
+    stateB4 = { ...state };
     target = {};
     if (ev.target.classList.contains('handle') || ev.target.classList.contains('cover')) {
       if (ev.target.classList.contains('left')) {
@@ -91,7 +90,7 @@ function Minimap(parent, lData, state) {
     ].join('');
   }
   function render(state) {
-    _.each(lines, (l) => {
+    lines.forEach((l) => {
       l.render(state);
     });
     renderFrame(state);

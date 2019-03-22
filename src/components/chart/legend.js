@@ -7,10 +7,10 @@ const mdiCheck = 'M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9
 function Legend(parent, data, state) {
   let element = document.createElement('div');
   element.classList.add('chart-legend');
-  _.each(data.lData, (ld) => {
+  data.lData.forEach((ld) => {
     let label = document.createElement('div');
     label.classList.add('label');
-    // let id = _.kebabCase(state.title + ld.id);
+
     label.innerHTML = [
       `<label><input type="checkbox" checked value="${ld.id}">`,
       `<span class="icon"><svg style="width:60px;height:60px;background:${

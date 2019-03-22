@@ -1,52 +1,73 @@
-import _ from 'lodash';
 import './grid.scss';
-import AxisY from './axisY';
 import Line from './line';
+import AxisY from './axisY';
+import Details from './details';
+import Hammer from 'hammerjs';
 
 function Grid(parent, data, state) {
   updateGridHeights(state);
   let element = document.createElement('div');
   element.classList.add('chart-grid');
   element.setAttribute('draggable', false);
-  const lines = {};
-  _.each(data.lData, (ld) => {
-    lines[ld.id] = Line(element, ld, state, { lineWidth: 5 });
+  const lines = [];
+  data.lData.forEach((ld) => {
+    lines.push(Line(element, ld, state, { lineWidth: 6 }));
   });
   const axisY = AxisY(element, data, state);
+  const details = Details(element, data, state, { lineWidth: 6 });
 
   function render(state) {
-    _.each(lines, (l) => {
+    lines.forEach((l) => {
       l.render(state);
     });
     axisY.render(state);
+    details.render(state);
   }
-
-  parent.appendChild(element);
 
   state.on(['maxValue', 'minValue', 'minClipValue', 'maxClipValue'], () =>
     updateGridHeights(state),
   );
-  return { render, element, axisY, lines };
-}
 
-function calcHeights(state) {
-  let scale = 1000 / Math.max(Math.abs(state.maxValue), Math.abs(state.minValue));
-  if (scale > 1) {
-    scale = 1;
-  }
+  parent.appendChild(element);
+  var hammer = new Hammer(element);
+  hammer.on('tap', function(ev) {
+    let current_offset = ev.srcEvent.offsetX / element.offsetWidth;
+    let clipLength = state.clipEnd - state.clipStart;
+    let current_clipOffset = state.clipStart + clipLength * current_offset;
+    let current_x = Math.round(data.lData[0].data.length * current_clipOffset);
+    current_clipOffset = current_x / data.lData[0].data.length;
+    current_offset = (current_clipOffset - state.clipStart) / clipLength;
 
-  let bottom = Math.round(Math.min(0, state.minValue) * scale);
-  let top = Math.round(Math.max(0, state.maxValue) * scale);
-  let clipBottom = Math.round(Math.min(0, state.minClipValue) * scale);
-  let clipTop = Math.round(Math.max(0, state.maxClipValue) * scale);
-  let clipScale = (top - bottom) / (clipTop - clipBottom);
-  return { scale, bottom, top, clipBottom, clipTop, clipScale };
+    state.patch({ current_offset, current_x, current_show: true });
+  });
+
+  state.on(['clipEnd', 'clipStart'], () => {
+    updateCurrentOffset(state, data);
+  });
+
+  return { render, element, lines, axisY, details };
 }
 
 function updateGridHeights(state) {
-  let heights = calcHeights(state);
-  if (!_.isEqual(state.gridHeights, heights)) {
-    state.patch({ gridHeights: heights });
+  let grid_scale = 1000 / Math.max(Math.abs(state.maxValue), Math.abs(state.minValue));
+  if (grid_scale > 1) {
+    grid_scale = 1;
   }
+
+  let grid_bottom = Math.round(Math.min(0, state.minValue) * grid_scale);
+  let grid_top = Math.round(Math.max(0, state.maxValue) * grid_scale);
+  let grid_clipBottom = Math.round(Math.min(0, state.minClipValue) * grid_scale);
+  let grid_clipTop = Math.round(Math.max(0, state.maxClipValue) * grid_scale);
+  let grid_clipScale = (grid_top - grid_bottom) / (grid_clipTop - grid_clipBottom);
+  state.patch({ grid_scale, grid_bottom, grid_top, grid_clipBottom, grid_clipTop, grid_clipScale });
 }
+
+function updateCurrentOffset(state, data) {
+  let clipLength = state.clipEnd - state.clipStart;
+  let current_clipOffset = state.current_x / data.lData[0].data.length;
+  let current_offset = (current_clipOffset - state.clipStart) / clipLength;
+
+  state.patch({ current_offset });
+}
+
 export default Grid;
