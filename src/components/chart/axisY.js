@@ -55,7 +55,7 @@ function AxisY(parent, data, state) {
       lv += step;
     }
   }
-  render = _.throttle(render, 500);
+  render = _.debounce(render, 500);
   state.on('grid_clipTop', () => render(state));
   return { render, parent };
 }

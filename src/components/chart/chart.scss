@@ -3,10 +3,11 @@
 .chart {
   position: relative;
   // height: 95vw;
-  height: 90vh;
+  height: 75vh;
   min-height: 900px;
   user-select: none;
   overflow: hidden;
+  font-family: sans-serif;
   * {
     box-sizing: border-box;
   }

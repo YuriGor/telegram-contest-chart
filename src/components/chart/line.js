@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import './line.scss';
-
+import { getDebouncedValue } from '../../lib/state';
 function Line(parent, data, state, options) {
   options = { ...{ lineWidth: 1 }, ...options };
 
@@ -25,14 +26,17 @@ function Line(parent, data, state, options) {
     }" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/>`;
     element.setAttribute('viewBox', `0 ${state.grid_bottom} ${data.data.length} ${state.grid_top}`);
   }
-  function renderClip(state) {
+  let debouncedClipScale = getDebouncedValue(() => state.grid_clipScale, () => renderClip(state));
+  function renderClip(state, forceHeight) {
     if (!options.fullWidth) {
       let clipW = state.clipEnd - state.clipStart;
       let w = 1 / clipW;
       let l = -state.clipStart * w;
       // element.style = `width:${w * 100}%;left:${l * 100}%;`;
-      element.style = `height:${state.grid_clipScale * 99.4}%;width:${w *
-        100}%;transform:translate3d(${l * clipW * 100}%,0,0);`;
+      let h = (forceHeight ? state.grid_clipScale : debouncedClipScale()) * 99.4;
+      element.style = `height:${h}%;width:${w * 100}%;transform:translate3d(${l *
+        clipW *
+        100}%,0,0);`;
     }
   }
   function render(state) {
@@ -42,7 +46,7 @@ function Line(parent, data, state, options) {
       element.classList.remove('hidden');
     }
     renderSVG(state);
-    renderClip(state);
+    renderClip(state, true);
   }
   state.on(['grid_top', 'grid_scale', 'grid_bottom'], () => {
     renderSVG(state);

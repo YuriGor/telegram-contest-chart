@@ -2,28 +2,23 @@
 
 $frameColor: #ddeaf3;
 $handleWidth: 16px;
-$paddingTop: 40px;
 
 .chart-minimap {
   height: $minimapHeight;
   position: relative;
   width: 100%;
-  padding-top: $paddingTop;
+  margin-top: $minimapMarginTop;
   svg.line {
     position: absolute;
-    top: $paddingTop;
-    // right: 0;
-    // bottom: 0px;
-    left: 0;
     width: 100%;
-    height: calc(100% - #{$paddingTop});
+    height: 100%;
     pointer-events: none;
     z-index: 3;
   }
   .cover,.handle,.frame {
     // transition-duration: $panTransition;
     // transition-property: left, right;
-    height: calc(100% - #{$paddingTop});
+    height: calc(100%);
     position: absolute;
   }
   .cover {

@@ -1,10 +1,11 @@
 @import "cfg";
 
 .chart-details-ruler {
-  transition-property: opacity;
+  transition-property: opacity,transform;
   transition-timing-function: ease-out;
   transition-duration: 0.3s;
   position: absolute;
+  pointer-events: none;
   left: 0;
   //transform: translate3d(50%,-200%,0);
   opacity: 0;
@@ -20,11 +21,58 @@
   transition-timing-function: ease-out;
   transition-duration: 0.3s;
   position: absolute;
+  pointer-events: none;
   left: 0;
   //transform: translate3d(50%,-200%,0);
   opacity: 0;
   z-index: 3;
   &.show {
     opacity: 1;
+  }
+}
+
+.chart-details-panel {
+  background: #FFF;
+  border: 1px solid rgba(#000,0.1);
+  border-radius: 14px;
+  box-shadow: 0 2px 4px rgba(#000,0.1);
+  padding:18px 30px;
+
+  transition-property: opacity, left, transform;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
+  position: absolute;
+  opacity: 0;
+  z-index: 4;
+  // width:2px;
+  // height: 100%;
+  &.show {
+    opacity: 1;
+  }
+  .chart-details-panel-time {
+    font-size: 36px;
+    margin-bottom: 24px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .chart-details-panel-values {
+    pointer-events: none;
+    &>div {
+      display: inline-block;
+      margin-right: 60px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+      div {
+        display: block;
+        font-size: 31px;
+
+        &:first-child {
+          font-weight: bold;
+          font-size: 43px;
+        }
+      }
+    }
   }
 }

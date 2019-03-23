@@ -117,4 +117,5 @@ function updateBoundaries(data, state) {
   if (maxClipValue === null || minClipValue === null) return;
   state.patch({ maxClipValue, minClipValue });
 }
+
 export default Chart;

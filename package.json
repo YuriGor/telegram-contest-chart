@@ -6,6 +6,7 @@
   "scripts": {
     "scsscfg": "node ./scsscfg",
     "build": "npm run scsscfg && webpack --mode=production",
+    "build-dev": "npm run scsscfg && webpack --mode=development",
     "start": "npm run scsscfg && webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

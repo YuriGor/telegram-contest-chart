@@ -70,10 +70,33 @@ function State(state) {
     });
     toFire = _.uniq(toFire);
     _.each(toFire, (l) => {
-      l(fieldsChanged);
+      _.defer(() => l(fieldsChanged));
     });
   };
   return state;
 }
 
 export default State;
+
+export const getDebouncedValue = function(get, refresh, wait = 500) {
+  let value;
+  let time;
+  return () => {
+    let args = arguments;
+    if (time === undefined || Date.now() - time > wait) {
+      value = get.apply(null, args);
+      time = Date.now();
+    } else {
+      time = Date.now();
+      _.delay(() => {
+        if (Date.now() - time > wait) {
+          let newValue = get.apply(null, args);
+          if (newValue !== value) {
+            refresh();
+          }
+        }
+      }, wait - Date.now() + time + 1);
+    }
+    return value;
+  };
+};

@@ -49,8 +49,9 @@ function Minimap(parent, lData, state) {
         target.right = true;
       }
     } else if (ev.target.classList.contains('frame')) {
-      target.left = true;
-      target.right = true;
+      let x = ev.srcEvent.offsetX / ev.target.offsetWidth;
+      target.left = x < 0.95;
+      target.right = x > 0.05;
     }
   });
 
@@ -63,7 +64,8 @@ function Minimap(parent, lData, state) {
       patch.clipEnd = stateB4.clipEnd + ev.deltaX / element.offsetWidth;
     }
     if (target.left || target.right) {
-      state.patch(patch);
+      if (!target.left || !target.right || (patch.clipStart >= 0 && patch.clipEnd <= 1))
+        state.patch(patch);
     }
   });
 
