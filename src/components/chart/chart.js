@@ -43,7 +43,7 @@ function Chart(parent, data, options) {
   element.innerHTML = `<h1>${options.title}</h1>`;
   const grid = Grid(element, data, state);
   const axisX = AxisX(element, data.xData, state);
-  const minimap = Minimap(element, data.lData, state);
+  const minimap = Minimap(element, data, state);
   const legend = Legend(element, data, state);
   function render() {
     grid.render(state);

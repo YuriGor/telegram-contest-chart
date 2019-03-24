@@ -1,17 +1,15 @@
 @import "cfg";
 
-svg.line {
-  transition-property: opacity, height;
+.night-mode {
+  path.line {
+    // opacity: 0.345;
+  }
+}
+
+path.line {
+  transition-property: opacity;
   transition-duration: 0.3s;
   transition-timing-function: ease-out;
-  position: absolute;
-  bottom: 0;
-  // right: 0;
-  // bottom: 26px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
   &.hidden {
     opacity: 0;
   }

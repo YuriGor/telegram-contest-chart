@@ -1,18 +1,14 @@
 import Hammer from 'hammerjs';
 import './minimap.scss';
-import Line from './line';
+import Canvas from './canvas';
 
 const gripWidth = 16;
 
-function Minimap(parent, lData, state) {
+function Minimap(parent, data, state) {
   let element = document.createElement('div');
   element.classList.add('chart-minimap');
   element.setAttribute('draggable', false);
-
-  const lines = [];
-  lData.forEach((ld) => {
-    lines.push(Line(element, ld, state, { lineWidth: 2, fullWidth: true }));
-  });
+  const canvas = Canvas(element, data, state, { lineWidth: 2, fullWidth: true });
 
   let leftCover = document.createElement('div');
   leftCover.classList.add('cover', 'left');
@@ -92,9 +88,7 @@ function Minimap(parent, lData, state) {
     ].join('');
   }
   function render(state) {
-    lines.forEach((l) => {
-      l.render(state);
-    });
+    canvas.render(state);
     renderFrame(state);
   }
 

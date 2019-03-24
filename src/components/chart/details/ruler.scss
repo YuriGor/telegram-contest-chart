@@ -1,0 +1,17 @@
+@import "../cfg";
+
+.chart-details-ruler {
+  transition-property: opacity;
+  transition-timing-function: ease-out;
+  transition-duration: 0.3s;
+  opacity: 0;
+  &.show {
+    opacity: 1;
+  }
+}
+
+.night-mode {
+  .chart-details-ruler {
+    stroke:rgba(#FFF,0.1);
+  }
+}

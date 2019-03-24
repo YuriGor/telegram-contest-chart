@@ -22,7 +22,7 @@ $handleWidth: 16px;
     position: absolute;
   }
   .cover {
-    background: rgba(lighten($frameColor,5%),0.65);
+    background: rgba(darken($frameColor,5%),0.65);
     z-index: 3;
     &.left {
       left:0px;
@@ -48,5 +48,18 @@ $handleWidth: 16px;
     border-bottom: 3px solid $frameColor;
     cursor: ew-resize;
     z-index: 1;
+  }
+}
+
+.night-mode {
+  .cover {
+    background: rgba(#23313a,0.6);
+  }
+  .handle {
+    background: rgba($frameColor,0.1);
+  }
+  .frame {
+    border-top: 3px solid rgba($frameColor,0.1);
+    border-bottom: 3px solid rgba($frameColor,0.1);
   }
 }

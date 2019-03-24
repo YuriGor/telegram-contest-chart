@@ -88,3 +88,21 @@
     }
   }
 }
+
+.night-mode {
+  .chart-legend {
+    .label {
+      label {
+        border: 4px solid rgba(#FFF, 0.1);
+        .icon {
+          &:before {
+            background: #FFF;
+          }
+          &:after {
+            background: #242f3e;
+          }
+        }
+      }
+    }
+  }
+}

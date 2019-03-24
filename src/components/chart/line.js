@@ -1,19 +1,20 @@
-import _ from 'lodash';
 import './line.scss';
-import { getDebouncedValue } from '../../lib/state';
+
 function Line(parent, data, state, options) {
   options = { ...{ lineWidth: 1 }, ...options };
 
   var svgNS = 'http://www.w3.org/2000/svg';
-  let element = document.createElementNS(svgNS, 'svg');
+  let element = document.createElementNS(svgNS, 'path');
   element.classList.add('line');
-  element.setAttribute('preserveAspectRatio', 'none');
-  element.setAttribute('draggable', false);
-  // element.setAttribute('width', '100%');
-  // element.setAttribute('height', '100%');
+  element.setAttribute('stroke', data.color);
+  element.setAttribute('stroke-width', options.lineWidth);
+  element.setAttribute('stroke-linecap', 'round');
+  element.setAttribute('stroke-linejoin', 'round');
+  element.setAttribute('fill', 'none');
+  element.setAttribute('vector-effect', 'non-scaling-stroke');
   parent.appendChild(element);
 
-  function renderSVG(state) {
+  function renderPath(state) {
     let d = 'M ';
     for (var x = 0; x < data.data.length; x++) {
       d += `${x} ${state.grid_top -
@@ -21,46 +22,26 @@ function Line(parent, data, state, options) {
         state.grid_bottom} `;
       if (x == 0) d += 'L ';
     }
-    element.innerHTML = `<path d="${d}" stroke="${data.color}" stroke-width="${
-      options.lineWidth
-    }" stroke-linecap="round" stroke-linejoin="round" fill="none" vector-effect="non-scaling-stroke"/>`;
-    element.setAttribute('viewBox', `0 ${state.grid_bottom} ${data.data.length} ${state.grid_top}`);
+    element.setAttribute('d', d);
   }
-  let debouncedClipScale = getDebouncedValue(() => state.grid_clipScale, () => renderClip(state));
-  function renderClip(state, forceHeight) {
-    if (!options.fullWidth) {
-      let clipW = state.clipEnd - state.clipStart;
-      let w = 1 / clipW;
-      let l = -state.clipStart * w;
-      // element.style = `width:${w * 100}%;left:${l * 100}%;`;
-      let h = (forceHeight ? state.grid_clipScale : debouncedClipScale()) * 99.4;
-      element.style = `height:${h}%;width:${w * 100}%;transform:translate3d(${l *
-        clipW *
-        100}%,0,0);`;
-    }
-  }
-  function render(state) {
+  function toggle(state) {
     if (state.hiddenLines && state.hiddenLines[data.id]) {
       element.classList.add('hidden');
     } else {
       element.classList.remove('hidden');
     }
-    renderSVG(state);
-    renderClip(state, true);
+  }
+  function render(state) {
+    toggle(state);
+    renderPath(state);
   }
   state.on(['grid_top', 'grid_scale', 'grid_bottom'], () => {
-    renderSVG(state);
+    renderPath(state);
   });
 
   state.on(['hiddenLines'], () => {
-    render(state);
+    toggle(state);
   });
-
-  if (!options.fullWidth) {
-    state.on(['grid_clipScale', 'clipStart', 'clipEnd'], () => {
-      renderClip(state);
-    });
-  }
 
   return { render, element };
 }

@@ -18,3 +18,11 @@
     font-size: $axisHeight/2 - 6px;
   }
 }
+
+.night-mode {
+  .axis-x {
+    span {
+      color: rgba(#96a2aa,0.6);
+    }
+  }
+}

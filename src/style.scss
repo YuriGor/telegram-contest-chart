@@ -6,12 +6,49 @@ html,body {
   position:absolute;
   overflow-x: hidden;
 }
-// body {
-//   padding: 15px;
-// }
+
+html,body {
+  .night-mode {
+    background:#242f3e;
+    color: #FFF;
+  }
+}
 
 #charts {
   width:100%;
   padding:0 20px;
   box-sizing: border-box;
+}
+
+#day-night-mode {
+  position:absolute;
+  color:#108be3;
+  right: 20px;
+  top: 20px;
+  font-size: 26px;
+  font-family: sans-serif;
+  text-decoration: none;
+  z-index: 2;
+  svg {
+    transform: translateY(5px);
+
+  }
+  path,circle {
+    stroke:#108be3;
+    fill:#108be3;
+  }
+  span+svg,span+span {
+    display: none
+  }
+}
+
+.night-mode {
+  #day-night-mode {
+    svg,span {
+      display: none;
+    }
+    span+svg,span+span {
+      display: inline
+    }
+  }
 }

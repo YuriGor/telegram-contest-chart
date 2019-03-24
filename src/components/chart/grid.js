@@ -1,7 +1,7 @@
 import './grid.scss';
-import Line from './line';
+import Canvas from './canvas';
 import AxisY from './axisY';
-import Details from './details';
+import Details from './details/details';
 import Hammer from 'hammerjs';
 
 function Grid(parent, data, state) {
@@ -9,17 +9,12 @@ function Grid(parent, data, state) {
   let element = document.createElement('div');
   element.classList.add('chart-grid');
   element.setAttribute('draggable', false);
-  const lines = [];
-  data.lData.forEach((ld) => {
-    lines.push(Line(element, ld, state, { lineWidth: 5 }));
-  });
+  const canvas = Canvas(element, data, state, { lineWidth: 5 });
   const axisY = AxisY(element, data, state);
-  const details = Details(element, data, state, { lineWidth: 5 });
+  const details = Details(element, canvas, data, state, { lineWidth: 5 });
 
   function render(state) {
-    lines.forEach((l) => {
-      l.render(state);
-    });
+    canvas.render(state);
     axisY.render(state);
     details.render(state);
   }
@@ -104,7 +99,6 @@ function Grid(parent, data, state) {
   hammer.on('pinchmove', function(ev) {
     let current_offset = ev.center.x / element.offsetWidth;
     let clipLength = stateB4.clipEnd - stateB4.clipStart;
-    let current_clipOffset = stateB4.clipStart + clipLength * current_offset;
 
     let scaledClipLength = clipLength / ev.scale;
 
@@ -126,7 +120,7 @@ function Grid(parent, data, state) {
     updateCurrentOffset(state, data, element.offsetWidth);
   });
 
-  return { render, element, lines, axisY, details };
+  return { render, element, canvas, axisY, details };
 }
 
 function updateGridHeights(state) {
