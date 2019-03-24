@@ -35,3 +35,23 @@
 
 - 'Pan' and 'Pinch' gestures on the main chart area
 - 'Pan' gesture on details panel to slide over X-axis
+
+
+## Implementation details
+
+### Webpack + Babel + Lodash tree shaking plugin
+
+* Handy but still lightweight
+
+### SVG + CSS (translate3D/transitions/:nth-child) for rendering
+
+* nice and fast enough, but still easy in implementation
+* dynamic CSS classes injecting to use `:nth-last-child` selector instead of manipulating label nodes directly
+(see axisX.js and dynamicCssRule.js)
+
+### ES modules as components + decoupled state management
+
+* take a look at state.js - fast and dirty but durable enough "micro-redux"
+* isolated HTML
+
+All the code except Lodash and hammer.js written by myself from scratch specially for this constest.
