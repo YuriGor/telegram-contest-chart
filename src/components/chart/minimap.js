@@ -1,6 +1,7 @@
 import Hammer from 'hammerjs';
 import './minimap.scss';
 import Canvas from './canvas';
+import { getDebouncedValue } from '../../lib/state';
 
 const gripWidth = 16;
 
@@ -31,6 +32,9 @@ function Minimap(parent, data, state) {
   rightCover.classList.add('cover', 'right');
   element.appendChild(rightCover);
 
+  let debouncedOffsetWidth = getDebouncedValue(() => element.offsetWidth, null, 1000);
+  let debouncedFrameOffsetWidth = getDebouncedValue(() => frame.offsetWidth, null, 1000);
+
   let stateB4 = null;
   let target = {};
   var hammer = new Hammer(element);
@@ -45,7 +49,7 @@ function Minimap(parent, data, state) {
         target.right = true;
       }
     } else if (ev.target.classList.contains('frame')) {
-      let x = ev.srcEvent.offsetX / ev.target.offsetWidth;
+      let x = ev.srcEvent.offsetX / debouncedFrameOffsetWidth();
       target.left = x < 0.95;
       target.right = x > 0.05;
     }
@@ -53,11 +57,12 @@ function Minimap(parent, data, state) {
 
   hammer.on('panmove', function(ev) {
     let patch = {};
+    const offset = debouncedOffsetWidth();
     if (target.left) {
-      patch.clipStart = stateB4.clipStart + ev.deltaX / element.offsetWidth;
+      patch.clipStart = stateB4.clipStart + ev.deltaX / offset;
     }
     if (target.right) {
-      patch.clipEnd = stateB4.clipEnd + ev.deltaX / element.offsetWidth;
+      patch.clipEnd = stateB4.clipEnd + ev.deltaX / offset;
     }
     if (target.left || target.right) {
       if (!target.left || !target.right || (patch.clipStart >= 0 && patch.clipEnd <= 1))

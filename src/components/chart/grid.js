@@ -3,6 +3,7 @@ import Canvas from './canvas';
 import AxisY from './axisY';
 import Details from './details/details';
 import Hammer from 'hammerjs';
+import { getDebouncedValue } from '../../lib/state';
 
 function Grid(parent, data, state) {
   updateGridHeights(state);
@@ -26,23 +27,24 @@ function Grid(parent, data, state) {
   parent.appendChild(element);
   var hammer = new Hammer(element);
   hammer.get('tap').set({ threshold: 15 });
-  function calcX(offsetX) {
-    let current_offset = offsetX / element.offsetWidth;
+  function calcX(offsetX, offsetWidth) {
+    let current_offset = offsetX / offsetWidth;
     let clipLength = state.clipEnd - state.clipStart;
     let current_clipOffset = state.clipStart + clipLength * current_offset;
     let current_x = Math.round(data.lData[0].data.length * current_clipOffset);
     current_clipOffset = current_x / data.lData[0].data.length;
     current_offset = (current_clipOffset - state.clipStart) / clipLength;
     return {
-      current_offsetPx: current_offset * element.offsetWidth,
+      current_offsetPx: current_offset * offsetWidth,
       current_offset,
       current_x,
       current_show: true,
     };
   }
+  let debouncedOffsetWidth = getDebouncedValue(() => element.offsetWidth, null, 1000);
   hammer.on('tap', function(ev) {
     if (ev.target !== element) return;
-    state.patch(calcX(ev.srcEvent.offsetX));
+    state.patch(calcX(ev.srcEvent.offsetX, debouncedOffsetWidth()));
   });
   let stateB4 = null;
   let panTarget = null;
@@ -63,13 +65,14 @@ function Grid(parent, data, state) {
     let patch = {};
     if (panTarget == 'grid') {
       let scale = stateB4.clipEnd - stateB4.clipStart;
-      patch.clipStart = stateB4.clipStart - (ev.deltaX * scale) / element.offsetWidth;
-      patch.clipEnd = stateB4.clipEnd - (ev.deltaX * scale) / element.offsetWidth;
+      const offset = debouncedOffsetWidth();
+      patch.clipStart = stateB4.clipStart - (ev.deltaX * scale) / offset;
+      patch.clipEnd = stateB4.clipEnd - (ev.deltaX * scale) / offset;
       if (patch.clipStart >= 0 && patch.clipEnd <= 1) {
         state.patch(patch);
       }
     } else {
-      state.patch(calcX(stateB4.current_offsetPx + ev.deltaX));
+      state.patch(calcX(stateB4.current_offsetPx + ev.deltaX, debouncedOffsetWidth()));
     }
   });
 
@@ -97,7 +100,7 @@ function Grid(parent, data, state) {
   });
 
   hammer.on('pinchmove', function(ev) {
-    let current_offset = ev.center.x / element.offsetWidth;
+    let current_offset = ev.center.x / debouncedOffsetWidth();
     let clipLength = stateB4.clipEnd - stateB4.clipStart;
 
     let scaledClipLength = clipLength / ev.scale;
@@ -112,15 +115,15 @@ function Grid(parent, data, state) {
   });
 
   hammer.on('pinchend', function(ev) {
-    console.log('pinchend');
+    // console.log('pinchend');
     stateB4 = null;
   });
 
   state.on(['clipEnd', 'clipStart'], () => {
-    updateCurrentOffset(state, data, element.offsetWidth);
+    updateCurrentOffset(state, data, debouncedOffsetWidth());
   });
 
-  return { render, element, canvas, axisY, details };
+  return { render, element, canvas, axisY, details, debouncedOffsetWidth };
 }
 
 function updateGridHeights(state) {

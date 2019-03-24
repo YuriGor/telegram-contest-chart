@@ -88,14 +88,16 @@ export const getDebouncedValue = function(get, refresh, wait = 500) {
       time = Date.now();
     } else {
       time = Date.now();
-      _.delay(() => {
-        if (Date.now() - time > wait) {
-          let newValue = get.apply(null, args);
-          if (newValue !== value) {
-            refresh();
+      if (refresh) {
+        _.delay(() => {
+          if (Date.now() - time > wait) {
+            let newValue = get.apply(null, args);
+            if (newValue !== value) {
+              refresh();
+            }
           }
-        }
-      }, wait - Date.now() + time + 1);
+        }, wait - Date.now() + time + 1);
+      }
     }
     return value;
   };

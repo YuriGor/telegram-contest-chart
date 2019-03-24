@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import './dot.scss';
+import { getDebouncedValue } from '../../../lib/state';
 
 function Dot(canvas, data, state, options) {
   options = { ...{ lineWidth: 1 }, ...options };
@@ -15,13 +16,21 @@ function Dot(canvas, data, state, options) {
 
   canvas.appendChild(element);
 
+  const debouncedCanvasSize = getDebouncedValue(
+    () => {
+      return { w: canvas.element.clientWidth, h: canvas.element.clientHeight };
+    },
+    () => unscale(state),
+    100,
+  );
+
   function unscale(state) {
     let w = state.clipEnd - state.clipStart;
     let h = 1 / state.grid_clipScale;
-
+    const cansize = debouncedCanvasSize();
     let viewBox = canvas.getViewBox(state);
-    let W = (viewBox[2] - viewBox[0]) / canvas.element.clientWidth;
-    let H = (viewBox[3] - viewBox[1]) / canvas.element.clientHeight;
+    let W = (viewBox[2] - viewBox[0]) / cansize.w;
+    let H = (viewBox[3] - viewBox[1]) / cansize.h;
     element.setAttribute('rx', `${W * options.lineWidth * 2}`);
     element.setAttribute('ry', `${H * options.lineWidth * 2}`);
   }
@@ -57,7 +66,7 @@ function Dot(canvas, data, state, options) {
     ['grid_bottom', 'grid_top', 'clipEnd', 'clipStart', 'grid_clipScale', 'canvas_clip'],
     () => {
       unscale(state);
-      _.delay(() => unscale(state), 300);
+      _.delay(() => unscale(state), 100);
     },
   );
 

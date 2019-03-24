@@ -20,7 +20,7 @@ function Canvas(parent, data, state, options) {
   function renderViewBox(state) {
     element.setAttribute('viewBox', getViewBox(state).join(' '));
   }
-  let debouncedClipScale = getDebouncedValue(() => state.grid_clipScale, () => renderClip(state));
+  const debouncedClipScale = getDebouncedValue(() => state.grid_clipScale, () => renderClip(state));
   function renderClip(state, forceHeight) {
     if (!options.fullWidth) {
       let clipW = state.clipEnd - state.clipStart;

@@ -42,7 +42,9 @@ function Chart(parent, data, options) {
   element.setAttribute('draggable', false);
   element.innerHTML = `<h1>${options.title}</h1>`;
   const grid = Grid(element, data, state);
-  const axisX = AxisX(element, data.xData, state);
+  const axisX = AxisX(element, data.xData, state, {
+    debouncedGridOffsetWidth: grid.debouncedOffsetWidth,
+  });
   const minimap = Minimap(element, data, state);
   const legend = Legend(element, data, state);
   function render() {

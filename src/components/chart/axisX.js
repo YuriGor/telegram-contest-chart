@@ -3,7 +3,7 @@ import _ from 'lodash';
 import './axisX.scss';
 import dynamicCssRule from '../../lib/dynamicCssRule';
 
-function AxisX(parent, data, state) {
+function AxisX(parent, data, state, options) {
   let element = document.createElement('div');
   element.classList.add('axis-x');
   let labelsX = [];
@@ -32,7 +32,7 @@ function AxisX(parent, data, state) {
   }
   function renderLabels(w) {
     let newShowEach = Math.round(
-      (data.length * minOffset) / ((parent.offsetWidth - minOffset) * w),
+      (data.length * minOffset) / ((options.debouncedGridOffsetWidth() - minOffset) * w),
     );
     if (newShowEach != 1 && newShowEach % 2 != 0) {
       newShowEach++;
@@ -49,7 +49,7 @@ function AxisX(parent, data, state) {
       element.className = `axis-x ${className}`;
     }
   }
-  renderLabels = _.debounce(renderLabels, 350);
+  renderLabels = _.debounce(renderLabels, 150);
   state.on(['clipStart', 'clipEnd'], (e) => {
     render(state);
   });
