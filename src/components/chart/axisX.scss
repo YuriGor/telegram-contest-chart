@@ -1,7 +1,14 @@
 @import "cfg";
+
+@keyframes die-slow {
+  0%   {display: inline;}
+  99%  {display: inline;}
+  100% {display: none;}
+}
+
 .axis-x {
-  transition-duration: $panTransition;
-  // transition-property: left, width, transform;
+  transition-duration: 0.4;
+  transition-property: width, transform;
   transition-property: width;
   position:relative;
   white-space: nowrap;
@@ -9,13 +16,15 @@
   height: $axisHeight;
   padding-top: 32px;
   span {
-    transition-duration: 0.7s;
+    transition-duration: 0.4s;
     transition-property: opacity, transform;
     position:absolute;
     opacity: 0;
     transform: scale(0.5);
     color: #96a2aa;
     font-size: $axisHeight/2 - 6px;
+    animation-name: die-slow;
+    animation-duration: 0.5s;
   }
 }
 

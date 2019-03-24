@@ -44,12 +44,12 @@ function AxisX(parent, data, state) {
       dynamicCssRule(
         className,
         `.axis-x.${className} span:nth-last-child(${showEach}n-${showEach -
-          1}){opacity:1;transform: scale(1);}`,
+          1}){opacity:1;transform: scale(1);animation-name: none;}`,
       );
       element.className = `axis-x ${className}`;
     }
   }
-  renderLabels = _.throttle(renderLabels, 150);
+  renderLabels = _.debounce(renderLabels, 350);
   state.on(['clipStart', 'clipEnd'], (e) => {
     render(state);
   });
