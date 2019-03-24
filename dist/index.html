@@ -13,5 +13,62 @@
     <div id="charts"></div>
     <br><br><br><br><br>
     <script src="bundle.js"></script>
+<div style="padding-left:40px;">
+<h2>App size</h2>
+<ul>
+<li>bundle.js - 64.6 KB</li>
+<li>index.html - 1.6 KB</li>
+</ul>
+
+<h2>Libs used</h2>
+<ul>
+<li>Hammerjs  - for touch gestures</li>
+<li>Lodash    - for making life easier</li>
+</ul>
+<h2>App Features</h2>
+
+<h3>Requirements extracted from screenshots / video</h3>
+<ul>
+<li>auto-scale to fit highest visibe point. Autoscale debounced to avoid jerking while panning</li>
+<li>animated Y-axis labels fade out, when autoscale happens, debounced too.</li>
+<li>auto-densing of X-axis labels depending on scale, with fade animation</li>
+<li>minimap with pan/scale</li>
+<li>legend with fancy "material" switches</li>
+<li>switching some line off cause chart auto-scale too</li>
+<li>Details callout / tooltip - triggered by 'tap'</li>
+<li>Nigth Mode - switch moved from bottom to the top-right corner, because there are 4 more charts below</li>
+</ul>
+
+<h3>Extra features not presented explicitly on screenshots / video</h3>
+<ul>
+<li>'Pan' and 'Pinch' gestures on the main chart area</li>
+<li>'Pan' gesture on details panel to slide over X-axis</li>
+</ul>
+
+<h2>Implementation details</h2>
+
+<h3>Webpack + Babel + Lodash tree shaking plugin</h3>
+
+<ul>
+<li>Handy but still lightweight</li>
+</ul>
+
+<h3>SVG + CSS (translate3D/transitions/:nth-child) for rendering</h3>
+
+<ul>
+<li>nice and fast enough, but still easy in implementation</li>
+<li>dynamic CSS classes injecting to use `:nth-last-child` selector instead of manipulating label nodes directly<br>
+(see axisX.js and dynamicCssRule.js)</li>
+</ul>
+<h3>ES modules as components + decoupled state management</h3>
+
+<ul>
+<li>take a look at state.js - fast and dirty but durable enough "micro-redux"</li>
+<li>isolated HTML attributes updating on real need only</li>
+</ul>
+
+<i>All the code except Lodash and hammer.js written by myself from scratch specially for this constest.</i>
+
+</div>
   </body>
 </html>
