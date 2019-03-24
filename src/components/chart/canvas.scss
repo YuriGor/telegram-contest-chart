@@ -16,6 +16,6 @@ svg.canvas {
 
 .night-mode {
   svg.canvas {
-    // filter: brightness(220%);
+    filter: grayscale(.35);
   }
 }

@@ -6,8 +6,9 @@
   "scripts": {
     "scsscfg": "node ./scsscfg",
     "build": "npm run scsscfg && webpack --mode=production",
+    "start": "npm run-script build && serve dist",
     "build-dev": "npm run scsscfg && webpack --mode=development",
-    "start": "npm run scsscfg && webpack-dev-server",
+    "start-dev": "npm run scsscfg && webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -43,6 +44,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "prettier": "*",
     "sass-loader": "^7.1.0",
+    "serve": "^10.1.2",
     "style-loader": "^0.23.1",
     "uglifyjs-webpack-plugin": "^2.1.2",
     "webpack": "^4.29.6",
