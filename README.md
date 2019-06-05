@@ -1,3 +1,5 @@
+[demo](https://deepdash.io/static/telechart/index.html)
+
 # Install
 `npm i`
 
